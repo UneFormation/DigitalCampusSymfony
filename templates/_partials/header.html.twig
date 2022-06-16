@@ -24,9 +24,9 @@
                 {% if app.user %}
                     <a href="{{ path('authentication-logout') }}" class="btn btn-outline-danger me-2">Déconnexion</a>
                 {% else %}
+                    <a href="{{ path('authentication-register') }}" class="btn btn-outline-primary me-2">S'inscrire</a>
                     <a href="{{ path('authentication-login') }}" class="btn btn-outline-light me-2">Se connecter</a>
                 {% endif %}
-{#                                        <a href="#" class="btn btn-warning">S'inscrire</a>#}
             </div>
         </div>
     </div>

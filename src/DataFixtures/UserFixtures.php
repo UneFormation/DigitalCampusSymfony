@@ -56,7 +56,7 @@ class UserFixtures extends Fixture
             ->setEmail($data['email'])
             ->setFirstname($data['firstname'])
             ->setLastname($data['lastname'])
-            ->setSlug($this->slugger->slug($data['firstname'] . ' ' . $data['lastname'])->lower())
+            ->computeSlug($this->slugger)
             ->setRoles($data['roles']);
 
         $user->setPassword($this->passwordEncoder->hashPassword($user, $data['password']));
