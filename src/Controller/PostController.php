@@ -24,8 +24,16 @@ class PostController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'byId')]
+    #[Route('/{id<\d+>}', name: 'byId')]
     public function postById(Post $post): Response
+    {
+        return $this->render('post/post.html.twig', [
+            'post' => $post
+        ]);
+    }
+
+    #[Route('/{slug}', name: 'bySlug')]
+    public function postBySlug(Post $post): Response
     {
         return $this->render('post/post.html.twig', [
             'post' => $post

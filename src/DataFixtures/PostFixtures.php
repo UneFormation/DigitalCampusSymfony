@@ -10,12 +10,13 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use Faker\Generator;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class PostFixtures extends Fixture implements DependentFixtureInterface
 {
     private Generator $faker;
 
-    public function __construct()
+    public function __construct(private SluggerInterface $slugger)
     {
         $this->faker = Factory::create('fr_FR');
     }
@@ -32,8 +33,10 @@ class PostFixtures extends Fixture implements DependentFixtureInterface
             /** @var Category $randomCategory */
             $randomCategory = $this->getReference('category-' . $randomCategoryId);
 
+            $title = $this->faker->sentence(6);
             $post = (new Post())
-                ->setTitle($this->faker->sentence(6))
+                ->setTitle($title)
+                ->setSlug($this->slugger->slug($title)->lower())
                 ->setPublishedDate($this->faker->dateTime())
                 ->setContent($this->faker->realText())
                 ->setUpdatedAt(new \DateTime())

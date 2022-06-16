@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\Trait\CreatedAtTrait;
+use App\Entity\Trait\SlugTrait;
 use App\Repository\PostRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -10,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Post
 {
     use CreatedAtTrait;
+    use SlugTrait;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]

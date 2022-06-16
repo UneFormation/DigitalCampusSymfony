@@ -5,7 +5,7 @@
             <p class="card-text">{{ post.content[0:100] }}...</p>
             <div class="d-flex justify-content-between align-items-center">
                 <div class="btn-group">
-                    <a href="{{ path('post-byId', {id: post.id}) }}" class="btn btn-sm btn-outline-secondary">Voir</a>
+                    <a href="{{ path('post-bySlug', {slug: post.slug}) }}" class="btn btn-sm btn-outline-secondary">Voir</a>
                 </div>
                 <small class="text-muted">{{ post.publishedDate|date('d/m/Y H:i') }}</small>
             </div>

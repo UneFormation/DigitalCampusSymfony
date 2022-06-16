@@ -8,12 +8,14 @@ use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
 use Faker\Generator;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class UserFixtures extends Fixture
 {
     private Generator $faker;
 
-    public function __construct(private UserPasswordHasherInterface $passwordEncoder)
+    public function __construct(private UserPasswordHasherInterface $passwordEncoder,
+    private SluggerInterface $slugger)
     {
         $this->faker = Factory::create('fr_FR');
     }
@@ -26,6 +28,9 @@ class UserFixtures extends Fixture
             $user->setEmail($this->faker->email());
             $user->setFirstname($this->faker->firstName());
             $user->setLastname($this->faker->lastName());
+            $user->setSlug($this->slugger->slug(
+                $user->getFirstname(). ' ' . $user->getLastname()
+            )->lower());
             $user->setRoles(['ROLE_AUTHOR']);
             $user->setPassword(
                 $this->passwordEncoder->hashPassword(
