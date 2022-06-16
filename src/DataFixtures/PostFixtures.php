@@ -32,12 +32,12 @@ class PostFixtures extends Fixture implements DependentFixtureInterface
             /** @var Category $randomCategory */
             $randomCategory = $this->getReference('category-' . $randomCategoryId);
 
-            $post = new Post();
-            $post->setTitle($this->faker->sentence(6));
-            $post->setContent($this->faker->realText());
-            $post->setUpdatedAt(new \DateTime());
-            $post->setAuthor($randomUser);
-            $post->setCategory($randomCategory);
+            $post = (new Post())
+                ->setTitle($this->faker->sentence(6))
+                ->setContent($this->faker->realText())
+                ->setUpdatedAt(new \DateTime())
+                ->setAuthor($randomUser)
+                ->setCategory($randomCategory);
 
             $manager->persist($post);
         }
