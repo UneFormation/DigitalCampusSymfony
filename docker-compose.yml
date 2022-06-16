@@ -1,7 +1,33 @@
 version: '3'
 
 services:
+  phpmyadmin:
+    depends_on:
+      - database
+    image: phpmyadmin:latest
+    ports:
+      - "8080:80"
+    environment:
+      - PMA_HOST=database
+      - PMA_PORT=3306
+      - PMA_USER=root
+      - PMA_PASSWORD=root_password
+
+  database:
+    image: mariadb:latest
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb-data:/var/lib/mysql
+    environment:
+      - MYSQL_USER=symfony
+      - MYSQL_PASSWORD=symfony_password
+      - MYSQL_ROOT_PASSWORD=root_password
+      - MYSQL_DATABASE=symfony
+
   php:
+    depends_on:
+      - database
     build:
       dockerfile: Dockerfile
       context: .
@@ -12,6 +38,8 @@ services:
       - ~/.gitconfig:/root/.gitconfig:ro
 
   symfony:
+    depends_on:
+      - database
     build:
       dockerfile: Dockerfile
       context: .
@@ -21,7 +49,25 @@ services:
       - ./:/app
       - ~/.gitconfig:/root/.gitconfig:ro
 
+  web:
+    depends_on:
+      - database
+    build:
+      dockerfile: Dockerfile
+      context: .
+    ports:
+      - "8000:8000"
+    entrypoint:
+     - symfony
+     - server:start
+    working_dir: /app
+    volumes:
+      - ./:/app
+      - ~/.gitconfig:/root/.gitconfig:ro
+
   composer:
+    depends_on:
+      - database
     build:
       dockerfile: Dockerfile
       context: .
@@ -30,21 +76,6 @@ services:
     volumes:
       - ./:/app
       - ~/.gitconfig:/root/.gitconfig:ro
-###> doctrine/doctrine-bundle ###
-  database:
-    image: postgres:${POSTGRES_VERSION:-13}-alpine
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB:-app}
-      # You should definitely change the password in production
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ChangeMe}
-      POSTGRES_USER: ${POSTGRES_USER:-symfony}
-    volumes:
-      - db-data:/var/lib/postgresql/data:rw
-      # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
-      # - ./docker/db/data:/var/lib/postgresql/data:rw
-###< doctrine/doctrine-bundle ###
 
 volumes:
-###> doctrine/doctrine-bundle ###
-  db-data:
-###< doctrine/doctrine-bundle ###
+  mariadb-data:

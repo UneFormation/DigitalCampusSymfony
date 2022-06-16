@@ -7,4 +7,4 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
     && mv composer.phar /usr/local/bin/composer \
     && curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | bash \
     && apt install -y symfony-cli libzip-dev \
-    && docker-php-ext-install zip
+    && docker-php-ext-install zip pdo pdo_mysql
