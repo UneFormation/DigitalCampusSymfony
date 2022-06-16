@@ -1,0 +1,14 @@
+<div class="col">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h4 class="card-title text-truncate">{{ post.title }}</h4>
+            <p class="card-text">{{ post.content[0:100] }}...</p>
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                    <a href="{{ path('post-byId', {id: post.id}) }}" class="btn btn-sm btn-outline-secondary">Voir</a>
+                </div>
+                <small class="text-muted">{{ post.publishedDate|date('d/m/Y H:i') }}</small>
+            </div>
+        </div>
+    </div>
+</div>
