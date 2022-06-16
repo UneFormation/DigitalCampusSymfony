@@ -10,8 +10,6 @@
         <link rel="stylesheet"  href="{{ asset('assets/css/app.css') }}" />
 
         {% block stylesheets %}{% endblock %}
-
-        {% block javascripts %}{% endblock %}
     </head>
     <body>
         <main>
@@ -22,7 +20,9 @@
             </div>
         </main>
 
-        <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}" defer async></script>
-        <script src="{{ asset('assets/js/app.js') }}" defer async></script>
+        <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
+        <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
+        <script src="{{ asset('assets/js/app.js') }}"></script>
+        {% block javascripts %}{% endblock %}
     </body>
 </html>

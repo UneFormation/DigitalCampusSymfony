@@ -6,6 +6,7 @@ use App\Entity\Post;
 use App\Entity\PostComment;
 use App\Entity\User;
 use App\Form\PostCommentFormType;
+use App\Repository\PostCommentRepository;
 use App\Repository\PostRepository;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
@@ -32,7 +33,7 @@ class PostController extends AbstractController
 
     #[Route('/{id<\d+>}', name: 'byId')]
     #[Route('/{slug}', name: 'bySlug')]
-    public function postView(Request $request, Post $post, EntityManagerInterface $entityManager): Response
+    public function postView(Request $request, Post $post, EntityManagerInterface $entityManager, PostCommentRepository $postCommentRepository): Response
     {
         $postComment = new PostComment();
         $form = $this->createForm(PostCommentFormType::class, $postComment);
@@ -43,6 +44,12 @@ class PostController extends AbstractController
             $author = $this->getUser();
             $postComment->setDate(new \DateTimeImmutable());
             $postComment->setAuthor($author);
+
+            $parentPostCommentId = (int)$request->get('parent_post_comment_id', 0);
+            if ($parentPostCommentId > 0) {
+                $parentPostComment = $postCommentRepository->findOneBy(['id' => $parentPostCommentId]);
+                $postComment->setParentPost($parentPostComment);
+            }
 
             $post->addComment($postComment);
 
