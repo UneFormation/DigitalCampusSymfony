@@ -12,6 +12,25 @@
 
     <div class="mt-5">
         <h3>Commentaires</h3>
+
+        {% if app.user %}
+            <div class="card">
+                <div class="card-header">
+                    Ajouter une réponse
+                </div>
+                <div class="card-body">
+                    {{ form_start(postCommentForm) }}
+                        {{ form_row(postCommentForm.title) }}
+                        {{ form_row(postCommentForm.content) }}
+
+                        <button type="submit" class="btn btn-outline-primary">Ajouter un commenter</button>
+                    {{ form_end(postCommentForm) }}
+                </div>
+            </div>
+        {% else %}
+            <div class="alert alert-warning">Veuillez vous connecter pour envoyer un commentaire.</div>
+        {% endif %}
+
         {% for comment in comments %}
             <div class="card mb-3">
                 <div class="card-header">{{ comment.title }}</div>
