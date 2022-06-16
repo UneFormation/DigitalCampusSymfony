@@ -9,4 +9,37 @@
     <small class="text-black-50">{{ post.publishedDate|date }}</small>
     <p class="mt-3">{{ post.content }}</p>
     <div class="mt-2">Auteur : <a href="{{ path('author-bySlug', {slug: post.author.slug}) }}">{{ post.author.firstname }} {{ post.author.lastname }}</a></div>
+
+    <div class="mt-5">
+        <h3>Commentaires</h3>
+        {% for comment in comments %}
+            <div class="card mb-3">
+                <div class="card-header">{{ comment.title }}</div>
+                <div class="card-body">
+                    <blockquote class="blockquote mb-0">
+                        <p>{{ comment.content }}</p>
+                        <footer class="blockquote-footer mt-3">{{ comment.date|date('d/m/Y H:i') }} <cite title="{{ comment.author.firstname }} {{ comment.author.lastname }}">{{ comment.author.firstname }} {{ comment.author.lastname }}</cite></footer>
+                    </blockquote>
+
+                    {% if comment.replies|length > 0 %}
+                        <div class="mt-3">
+                            <h4>Réponses</h4>
+                            {% for reply in comment.replies %}
+                                <div class="card mb-3">
+                                    <div class="card-header">{{ reply.title }}</div>
+                                    <div class="card-body">
+                                        <blockquote class="blockquote mb-0">
+                                            <p>{{ reply.content }}</p>
+                                            <footer class="blockquote-footer mt-3">{{ reply.date|date('d/m/Y H:i') }} <cite title="{{ reply.author.firstname }} {{ reply.author.lastname }}">{{ reply.author.firstname }} {{ reply.author.lastname }}</cite></footer>
+                                        </blockquote>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
 {% endblock %}

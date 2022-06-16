@@ -42,7 +42,7 @@ class CategoryFixtures extends Fixture
         static $total = 0; $slugs = [];
 
         do {
-            $title = trim($this->faker->word());
+            $title = trim($this->faker->sentence(3));
             $slug = $this->slugger->slug($title)->lower();
         } while (in_array($slug, $slugs, true));
         $slugs[] = $slug;

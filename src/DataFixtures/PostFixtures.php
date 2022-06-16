@@ -24,7 +24,7 @@ class PostFixtures extends Fixture implements DependentFixtureInterface
     public function load(ObjectManager $manager): void
     {
         $count = $this->faker->numberBetween(10, 30);
-        for ($a = 1; $a <= $count; $a++) {
+        for ($a = 0; $a < $count; $a++) {
             $randomUserId = $this->faker->numberBetween(0, 4);
             /** @var User $randomUser */
             $randomUser = $this->getReference('user-' . $randomUserId);
@@ -44,6 +44,7 @@ class PostFixtures extends Fixture implements DependentFixtureInterface
                 ->setCategory($randomCategory);
 
             $manager->persist($post);
+            $this->setReference('post-' . $a, $post);
         }
 
         $manager->flush();
