@@ -39,17 +39,18 @@ class CategoryFixtures extends Fixture
 
     public function createCategory(ObjectManager $manager, Category $parent = null): Category
     {
-        static $total = 0; $titles = [];
+        static $total = 0; $slugs = [];
 
         do {
-            $title = $this->faker->word();
-        } while (in_array($title, $titles, true));
-        $titles[] = $title;
+            $title = trim($this->faker->word());
+            $slug = $this->slugger->slug($title)->lower();
+        } while (in_array($slug, $slugs, true));
+        $slugs[] = $slug;
 
         $category = new Category();
         $category->setParent($parent);
         $category->setTitle($title);
-        $category->setSlug($this->slugger->slug($title)->lower());
+        $category->setSlug($slug);
 
         $manager->persist($category);
         $this->setReference('category-' . $total++, $category);

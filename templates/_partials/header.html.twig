@@ -20,10 +20,14 @@
                 <li><a href="{{ path('author-main') }}" class="nav-link px-2 text-secondary">Auteurs</a></li>
             </ul>
 
-            {#                        <div class="text-end">#}
-            {#                            <button type="button" class="btn btn-outline-light me-2">Login</button>#}
-            {#                            <button type="button" class="btn btn-warning">Sign-up</button>#}
-            {#                        </div>#}
+            <div class="text-end">
+                {% if app.user %}
+                    <a href="{{ path('authentication-logout') }}" class="btn btn-outline-danger me-2">Déconnexion</a>
+                {% else %}
+                    <a href="{{ path('authentication-login') }}" class="btn btn-outline-light me-2">Se connecter</a>
+                {% endif %}
+{#                                        <a href="#" class="btn btn-warning">S'inscrire</a>#}
+            </div>
         </div>
     </div>
 </header>
