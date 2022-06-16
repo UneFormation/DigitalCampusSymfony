@@ -2,6 +2,9 @@ version: '3'
 
 services:
   phpmyadmin:
+    networks:
+      - default
+      - traefik
     depends_on:
       - database
     image: phpmyadmin:latest
@@ -12,9 +15,17 @@ services:
       - PMA_PORT=3306
       - PMA_USER=root
       - PMA_PASSWORD=root_password
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.dc_symfony_phpmyadmin.tls=true
+      - traefik.http.services.dc_symfony_phpmyadmin.loadbalancer.server.port=80
+      - traefik.http.routers.dc_symfony_phpmyadmin.tls.certResolver=patiashvili
+      - traefik.http.routers.dc_symfony_phpmyadmin.rule=Host(`phpmyadmin.dc.patiashvili`)
 
   database:
     image: mariadb:latest
+    networks:
+      - default
     ports:
       - "3306:3306"
     volumes:
@@ -26,6 +37,8 @@ services:
       - MYSQL_DATABASE=symfony
 
   php:
+    networks:
+      - default
     depends_on:
       - database
     build:
@@ -38,6 +51,8 @@ services:
       - ~/.gitconfig:/root/.gitconfig:ro
 
   symfony:
+    networks:
+      - default
     depends_on:
       - database
     build:
@@ -50,6 +65,9 @@ services:
       - ~/.gitconfig:/root/.gitconfig:ro
 
   web:
+    networks:
+      - default
+      - traefik
     depends_on:
       - database
     build:
@@ -64,8 +82,16 @@ services:
     volumes:
       - ./:/app
       - ~/.gitconfig:/root/.gitconfig:ro
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.dc_symfony.tls=true
+      - traefik.http.services.dc_symfony.loadbalancer.server.port=8000
+      - traefik.http.routers.dc_symfony.tls.certResolver=patiashvili
+      - traefik.http.routers.dc_symfony.rule=Host(`www.dc.patiashvili`)
 
   composer:
+    networks:
+      - default
     depends_on:
       - database
     build:
@@ -79,3 +105,9 @@ services:
 
 volumes:
   mariadb-data:
+
+networks:
+  default:
+    driver: bridge
+  traefik:
+    name: traefik_proxy
