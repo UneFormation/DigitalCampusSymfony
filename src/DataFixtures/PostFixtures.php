@@ -34,6 +34,7 @@ class PostFixtures extends Fixture implements DependentFixtureInterface
 
             $post = (new Post())
                 ->setTitle($this->faker->sentence(6))
+                ->setPublishedDate($this->faker->dateTime())
                 ->setContent($this->faker->realText())
                 ->setUpdatedAt(new \DateTime())
                 ->setAuthor($randomUser)

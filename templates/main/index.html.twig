@@ -3,5 +3,29 @@
 {% block title %}Hello MainController!{% endblock %}
 
 {% block body %}
-    <h1>Hello World</h1>
+    <h1>Blog</h1>
+    <h2>Les derniers articles</h2>
+
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+        {% for post in posts %}
+            <div class="col">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h4 class="card-title">{{ post.title }}</h4>
+                        <p class="card-text">{{ post.content }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                <a href="#" class="btn btn-sm btn-outline-secondary">Voir</a>
+                            </div>
+                            <small class="text-muted">{{ post.publishedDate|date('d/m/Y H:i') }}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="text-center">
+        <a href="#" class="btn btn-lg btn-outline-primary">Voir tous les articles</a>
+    </div>
+
 {% endblock %}
