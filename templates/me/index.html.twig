@@ -4,5 +4,9 @@
 
 {% block body %}
     <h1>Mon compte</h1>
-
+    {{ form_start(userForm) }}
+        {{ form_row(userForm.firstname) }}
+        {{ form_row(userForm.lastname) }}
+        <button type="submit" class="btn btn-primary">Mettre à jour</button>
+    {{ form_end(userForm) }}
 {% endblock %}
