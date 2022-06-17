@@ -22,6 +22,7 @@
 
             <div class="text-end">
                 {% if app.user %}
+                    <a href="{{ path('me-main') }}" class="btn btn-primary me-2">Mon compte</a>
                     <a href="{{ path('authentication-logout') }}" class="btn btn-outline-danger me-2">Déconnexion</a>
                 {% else %}
                     <a href="{{ path('authentication-register') }}" class="btn btn-outline-primary me-2">S'inscrire</a>
