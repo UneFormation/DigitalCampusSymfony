@@ -1,0 +1,28 @@
+image: docker:stable
+
+variables:
+  DOCKER_TLS_CERTDIR: "/certs"
+
+services:
+  - docker:dind
+
+stages:
+  - Build primary resources
+  - Test
+
+build:test:
+  stage: Build primary resources
+  only:
+    refs:
+      - main
+    changes:
+      - "Dockerfile"
+      - "composer.json"
+      - "composer.lock"
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - docker info
+    - docker pull $CI_REGISTRY_IMAGE:php-${CI_COMMIT_REF_SLUG} || true
+    - docker build --build-arg SSH_PRIVATE_KEY --cache-from ${CI_REGISTRY_IMAGE}:php-${CI_COMMIT_REF_SLUG} --tag ${CI_REGISTRY_IMAGE}:php-${CI_COMMIT_REF_SLUG} -f Dockerfile .
+    - docker push $CI_REGISTRY_IMAGE:php-${CI_COMMIT_REF_SLUG}
