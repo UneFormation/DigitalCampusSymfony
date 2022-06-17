@@ -34,5 +34,5 @@ test:
   script:
     - docker info
     - docker pull $CI_REGISTRY_IMAGE:php-${CI_COMMIT_REF_SLUG} || true
-    - docker run --rm -it -w /app -v "$(pwd):/app" $CI_REGISTRY_IMAGE:php-${CI_COMMIT_REF_SLUG} composer install
-    - docker run --rm -it -w /app -v "$(pwd):/app" $CI_REGISTRY_IMAGE:php-${CI_COMMIT_REF_SLUG} php bin/phpunit
+    - docker run --rm -w /app -v "$(pwd):/app" $CI_REGISTRY_IMAGE:php-${CI_COMMIT_REF_SLUG} composer install
+    - docker run --rm -w /app -v "$(pwd):/app" $CI_REGISTRY_IMAGE:php-${CI_COMMIT_REF_SLUG} php bin/phpunit
