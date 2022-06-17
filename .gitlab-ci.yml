@@ -16,7 +16,7 @@ build:test:
     refs:
       - main
     changes:
-      - ".gitlab-ci.yaml"
+      - ".gitlab-ci.yml"
       - "Dockerfile"
       - "composer.json"
       - "composer.lock"
