@@ -2,10 +2,12 @@
 
 namespace App\Controller;
 
+use App\Controller\Trait\RoleTrait;
 use App\Entity\Post;
 use App\Entity\PostComment;
 use App\Entity\User;
 use App\Form\PostCommentFormType;
+use App\Form\PostFormType;
 use App\Repository\PostCommentRepository;
 use App\Repository\PostRepository;
 use Doctrine\Common\Collections\Criteria;
@@ -18,6 +20,8 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/post', name: 'post-')]
 class PostController extends AbstractController
 {
+    use RoleTrait;
+
     #[Route('/', name: 'main')]
     public function index(PostRepository $postRepository): Response
     {
@@ -28,6 +32,29 @@ class PostController extends AbstractController
                 12,
                 0
             ),
+        ]);
+    }
+
+    #[Route('/{id<\d+>}/edit', name: 'editById')]
+    #[Route('/{slug}/edit', name: 'editBySlug')]
+    public function postEdit(Request $request, Post $post, EntityManagerInterface $entityManager): Response
+    {
+        if ($response = $this->checkRole('ROLE_USER')) {
+            return $response;
+        }
+
+        $form = $this->createForm(PostFormType::class, $post);
+        $form->handleRequest($request);
+
+        if ($this->getUser() && $form->isSubmitted() && $form->isValid()) {
+            /** @var User $author */
+            $entityManager->persist($post);
+            $entityManager->flush();
+        }
+
+        return $this->render('post/post.edit.html.twig', [
+            'post' => $post,
+            'postForm' => $form->createView(),
         ]);
     }
 

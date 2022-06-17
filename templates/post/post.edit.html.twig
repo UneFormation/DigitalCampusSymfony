@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block body %}
+    <h1>Blog</h1>
+    <h2>Edition / {{ post.title }}</h2>
+
+    {{ form_start(postForm) }}
+
+        {{ form_row(postForm.title) }}
+        {{ form_row(postForm.category) }}
+        {{ form_row(postForm.author) }}
+        {{ form_row(postForm.content) }}
+
+        <button type="submit" class="btn btn-outline-primary">Modifier</button>
+    {{ form_end(postForm) }}
+{% endblock %}
