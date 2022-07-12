@@ -25,9 +25,9 @@ build:resources:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
     - docker info
-    - docker pull $CI_REGISTRY_IMAGE:php-${CI_COMMIT_REF_SLUG} || true
-    - docker build --build-arg SSH_PRIVATE_KEY --cache-from ${CI_REGISTRY_IMAGE}:php-${CI_COMMIT_REF_SLUG} --tag ${CI_REGISTRY_IMAGE}:php-${CI_COMMIT_REF_SLUG} -f Dockerfile .
-    - docker push $CI_REGISTRY_IMAGE:php-${CI_COMMIT_REF_SLUG}
+    - docker pull $CI_REGISTRY_IMAGE:php-main || true
+    - docker build --build-arg SSH_PRIVATE_KEY --cache-from ${CI_REGISTRY_IMAGE}:php-main --tag ${CI_REGISTRY_IMAGE}:php-main -f Dockerfile .
+    - docker push $CI_REGISTRY_IMAGE:php-main
 
 test:
   stage: Test
@@ -36,8 +36,8 @@ test:
   script:
     - docker info
     - docker pull $CI_REGISTRY_IMAGE:php-${CI_COMMIT_REF_SLUG} || true
-    - docker run --rm -w /app -v "$(pwd):/app" $CI_REGISTRY_IMAGE:php-${CI_COMMIT_REF_SLUG} composer install
-    - docker run --rm -w /app -v "$(pwd):/app" $CI_REGISTRY_IMAGE:php-${CI_COMMIT_REF_SLUG} php bin/phpunit
+    - docker run --rm -w /app -v "$(pwd):/app" $CI_REGISTRY_IMAGE:php-main composer install
+    - docker run --rm -w /app -v "$(pwd):/app" $CI_REGISTRY_IMAGE:php-main php bin/phpunit
 
 build:app:
   stage: Build
