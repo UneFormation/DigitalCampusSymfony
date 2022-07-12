@@ -17,6 +17,7 @@ build:resources:
     refs:
       - main
     changes:
+      - ".gitlab-ci.yml"
       - "Dockerfile"
       - "composer.json"
       - "composer.lock"
