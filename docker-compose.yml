@@ -50,6 +50,19 @@ services:
       - ./:/app
       - ~/.gitconfig:/root/.gitconfig:ro
 
+  phpunit:
+    networks:
+      - default
+    depends_on:
+      - database
+    build:
+      dockerfile: Dockerfile
+      context: .
+    entrypoint: /app/vendor/bin/phpunit
+    working_dir: /app
+    volumes:
+      - ./:/app
+
   symfony:
     networks:
       - default
@@ -102,6 +115,24 @@ services:
     volumes:
       - ./:/app
       - ~/.gitconfig:/root/.gitconfig:ro
+
+  instance:
+    image: test
+    networks:
+      - default
+      - traefik
+    depends_on:
+      - database
+    ports:
+      - "8000:80"
+    env_file:
+      - .env.local
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.dc_symfony.tls=true
+      - traefik.http.services.dc_symfony.loadbalancer.server.port=8000
+      - traefik.http.routers.dc_symfony.tls.certResolver=patiashvili
+      - traefik.http.routers.dc_symfony.rule=Host(`www.dc.patiashvili`)
 
 volumes:
   mariadb-data:
