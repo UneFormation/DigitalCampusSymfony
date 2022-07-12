@@ -70,7 +70,7 @@ deploy:production:
     - chmod 644 ~/.ssh/known_hosts
     # Add ssh key
     - eval $(ssh-agent -s)
-    - cat "$SSH_PRIVATE_DEPLOYEMENT_KEY" | ssh-add
+    - cat "$SSH_PRIVATE_DEPLOYEMENT_KEY" | ssh-add -
     # Copy configuration file
     - scp -P ${SSH_PRIVATE_DEPLOYMENT_PORT} -p ${ENV_PRODUCTION} ${SSH_PRIVATE_DEPLOYMENT_USER}@${SSH_PRIVATE_DEPLOYMENT_HOST}:/home/${SSH_PRIVATE_DEPLOYMENT_USER}/env/${DEPLOYMENT_TRAEFIK_PATH}-main
     # Log into docker registry
