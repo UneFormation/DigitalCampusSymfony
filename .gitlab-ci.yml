@@ -62,7 +62,6 @@ deploy:production:
     - tags
   environment:
     action: start
-    on_stop: stop:production
     name: 'production'
     url: 'https://dc.patiashvili.fr'
   script:
