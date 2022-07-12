@@ -49,6 +49,7 @@ build:app:
   before_script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
+    - cp $ENV_PRODUCTION .env
     - docker pull $CI_REGISTRY_IMAGE:app-latest || true
     - docker build --cache-from ${CI_REGISTRY_IMAGE}:app-latest --tag ${CI_REGISTRY_IMAGE}:app-${CI_COMMIT_TAG} --tag ${CI_REGISTRY_IMAGE}:app-latest -f Dockerfile.deploy .
     - docker push $CI_REGISTRY_IMAGE:app-${CI_COMMIT_TAG}
@@ -84,7 +85,7 @@ deploy:production:
       --label traefik.http.routers.web_${DEPLOYMENT_TRAEFIK_PATH}_${CI_COMMIT_REF_SLUG}.middlewares=SecHeader@file
       --label traefik.http.routers.web_${DEPLOYMENT_TRAEFIK_PATH}_${CI_COMMIT_REF_SLUG}.tls=true
       --label traefik.http.routers.web_${DEPLOYMENT_TRAEFIK_PATH}_${CI_COMMIT_REF_SLUG}.tls.certresolver=letsencrypt
-      --env-file /home/${SSH_PRIVATE_DEPLOYMENT_USER}/env/${DEPLOYMENT_TRAEFIK_PATH}-main
+      -v /home/${SSH_PRIVATE_DEPLOYMENT_USER}/env/${DEPLOYMENT_TRAEFIK_PATH}-main:/var/www/html/.env:ro
       --name ${DEPLOYMENT_DOMAIN}_${CI_COMMIT_REF_SLUG}
       --network traefik_proxy
       -d ${CI_REGISTRY_IMAGE}:app-${CI_COMMIT_TAG}"
