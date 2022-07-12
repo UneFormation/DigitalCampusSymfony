@@ -48,5 +48,5 @@ build:app:
   script:
     - docker pull $CI_REGISTRY_IMAGE:app-latest || true
     - docker build --cache-from ${CI_REGISTRY_IMAGE}:app-latest --tag ${CI_REGISTRY_IMAGE}:app-${CI_COMMIT_TAG} --tag ${CI_REGISTRY_IMAGE}:app-latest -f Dockerfile.deploy .
-    - docker push $CI_REGISTRY_IMAGE:app-${CI_REGISTRY_IMAGE}
+    - docker push $CI_REGISTRY_IMAGE:app-${CI_COMMIT_TAG}
     - docker push $CI_REGISTRY_IMAGE:app-latest
