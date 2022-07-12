@@ -29,20 +29,18 @@ build:resources:
     - docker build --build-arg SSH_PRIVATE_KEY --cache-from ${CI_REGISTRY_IMAGE}:php-main --tag ${CI_REGISTRY_IMAGE}:php-main -f Dockerfile .
     - docker push $CI_REGISTRY_IMAGE:php-main
 
-test:
-  stage: Test
-  before_script:
-    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-  script:
-    - docker info
-    - docker pull $CI_REGISTRY_IMAGE:php-${CI_COMMIT_REF_SLUG} || true
-    - docker run --rm -w /app -v "$(pwd):/app" $CI_REGISTRY_IMAGE:php-main composer install
-    - docker run --rm -w /app -v "$(pwd):/app" $CI_REGISTRY_IMAGE:php-main php bin/phpunit
+#test:
+#  stage: Test
+#  before_script:
+#    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+#  script:
+#    - docker info
+#    - docker pull $CI_REGISTRY_IMAGE:php-${CI_COMMIT_REF_SLUG} || true
+#    - docker run --rm -w /app -v "$(pwd):/app" $CI_REGISTRY_IMAGE:php-main composer install
+#    - docker run --rm -w /app -v "$(pwd):/app" $CI_REGISTRY_IMAGE:php-main php bin/phpunit
 
 build:app:
   stage: Build
-  needs:
-    - test
   only:
     - tags
   before_script:
